@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Service
 @Slf4j
-public class OrderService {
+public class FetchOrderService {
 
     private final ApiRoot apiRoot;
 
@@ -42,15 +42,15 @@ public class OrderService {
 
     private final OrderGateway orderGateway;
 
-    public OrderService(ApiRoot apiRoot, ApplicationProperties applicationProperties,
-                        OrderGateway orderGateway) {
+    public FetchOrderService(ApiRoot apiRoot, ApplicationProperties applicationProperties,
+                             OrderGateway orderGateway) {
         this.apiRoot = apiRoot;
         this.applicationProperties = applicationProperties;
         this.orderGateway = orderGateway;
     }
 
     public void fetchOrders() {
-        log.info("Retrieving orders...");
+        log.info("Retrieving orders from CT...");
 
         doFetchOrders();
 
@@ -87,7 +87,7 @@ public class OrderService {
     }
 
     private void sendOrder(Order order) {
-        log.info("Sending Order #{}", order.getId());
+        log.info("Processing Order #{}", order.getId());
         orderGateway.processOrder(order);
     }
 

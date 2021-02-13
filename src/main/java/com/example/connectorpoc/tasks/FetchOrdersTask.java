@@ -16,7 +16,7 @@
  */
 package com.example.connectorpoc.tasks;
 
-import com.example.connectorpoc.service.OrderService;
+import com.example.connectorpoc.service.FetchOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,15 +28,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class FetchOrdersTask {
 
-	private final OrderService orderService;
+	private final FetchOrderService fetchOrderService;
 
-	public FetchOrdersTask(OrderService orderService) {
-		this.orderService = orderService;
+	public FetchOrdersTask(FetchOrderService fetchOrderService) {
+		this.fetchOrderService = fetchOrderService;
 	}
 
 	@Scheduled(fixedRate = 30000) // TODO make rate configurable
     public void fetchOrders() {
-		orderService.fetchOrders();
+		fetchOrderService.fetchOrders();
     }
 
 }

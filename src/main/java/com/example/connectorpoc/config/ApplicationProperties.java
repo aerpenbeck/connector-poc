@@ -55,4 +55,7 @@ public class ApplicationProperties {
 
     @NotBlank
     private String ftPassword;
+
+    @NotBlank
+    private String ftToken;
 }

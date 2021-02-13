@@ -13,6 +13,7 @@ It has no real practical value.
 
 ## Limitations of POC
 - error handling is very limited
+- mapping of CT to FT Order is error prone
 - we do not refresh the API tokens
 - fetching orders from the Commercetools API is done in a blocking fashion (should be improved to non-blocking/async)
 - paging through all orders is not implemented yet (we only process the first page)
@@ -20,7 +21,7 @@ It has no real practical value.
 - after the order has been posted to the Fulfillmenttools API there should be some visible result/logging etc.
 - generated Java client for Fulfillmenttools API was added to source tree and manually modified to make it compile
   (usually we would generate the source as part of the build process)
-- Spring message channels are `DirectChannel` and should be changed into `PublishSubscribeChannel`  
+- Spring message channels are `DirectChannel` and should be changed into `PublishSubscribeChannel`
 
 ## Requirements
 - OpenJDK 11
