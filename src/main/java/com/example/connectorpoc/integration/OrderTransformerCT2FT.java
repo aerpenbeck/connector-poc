@@ -9,7 +9,7 @@ import org.springframework.integration.annotation.Transformer;
 import org.springframework.stereotype.Component;
 
 /**
- * Transform Commercetools Order object into Fullfilmenttools Order object.
+ * Transform Commercetools Order object into Fulfillmenttools Order object.
  */
 @Component
 @Slf4j

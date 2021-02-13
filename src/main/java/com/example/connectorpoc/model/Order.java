@@ -6,6 +6,7 @@ package com.example.connectorpoc.model;
 import lombok.Value;
 
 @Value
+@Deprecated
 public class Order {
 
     String id;

@@ -5,16 +5,45 @@ Commercetools Connector POC
 This POC shows how to connect [Commercetools](https://docs.commercetools.com/api/) and [Fulfillmenttools](https://fulfillmenttools.github.io/fulfillmenttools-api-reference/).
 It has no real practical value.
 
+## Approach
+- Orders are fetched using a scheduled Spring Task from the Commercetools API
+- Each order is placed into a Spring Integration channel
+- Each order is transformed from Commercetools POJO to Fulfillmenttools POJO
+- Each order is posted to the Fulfillmenttools API
+
+## Limitations of POC
+- error handling is very limited
+- we do not refresh the API tokens
+- fetching orders from the Commercetools API is done in a blocking fashion (should be improved to non-blocking/async)
+- paging through all orders is not implemented yet (we only process the first page)
+- we currently do not track which orders have already been processed (would require some persistence)
+- after the order has been posted to the Fulfillmenttools API there should be some visible result/logging etc.
+- generated Java client for Fulfillmenttools API was added to source tree and manually modified to make it compile
+  (usually we would generate the source as part of the build process)
+- Spring message channels are `DirectChannel` and should be changed into `PublishSubscribeChannel`  
+
 ## Requirements
 - OpenJDK 11
+- OpenAPI Generator [CLI](https://openapi-generator.tech/docs/installation/)
+- Node/npm (for OpenAPI generator)
 
 ## How to build
+```
+mvn clean install
+```
 
 ## How to run
 Edit your API client ID, secret, ... in `application-local.properties` and run
 ```
 mvn spring-boot:run -Plocal
 ```
+
+## Configuration
+All configuration is done in `application.properties` and `application-development.properties`
+Make sure you do not commit real ids, secrets, keys in these files.
+
+## Tests
+... TODO ...
 
 ## Links
 
@@ -34,6 +63,10 @@ mvn spring-boot:run -Plocal
 
 ### Spring
 - [Spring Initializr](https://start.spring.io/)
+
+### Swagger / OpenAPI
+- [OpenAPI Generator](https://openapi-generator.tech/docs/generators/java)
+- [swagger-codegen-maven-plugin](https://github.com/swagger-api/swagger-codegen/blob/master/modules/swagger-codegen-maven-plugin/README.md)
 
 ## License
 Connector POC shows how to connect Commercetools and Fulfillmenttools APIs.
