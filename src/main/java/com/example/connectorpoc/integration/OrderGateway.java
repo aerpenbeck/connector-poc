@@ -3,7 +3,7 @@
  */
 package com.example.connectorpoc.integration;
 
-import com.example.connectorpoc.model.Order;
+import com.commercetools.api.models.order.Order;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
 
@@ -13,6 +13,6 @@ import org.springframework.integration.annotation.MessagingGateway;
 @MessagingGateway(name = "orderGateway")
 public interface OrderGateway {
 
-    @Gateway(requestChannel = "ordersChannel")
+    @Gateway(requestChannel = "incomingOrdersChannel")
     void processOrder(Order order);
 }

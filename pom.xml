@@ -27,6 +27,8 @@
 		<properties.file>application-development.properties</properties.file>
 		<debug.port>8787</debug.port>
 
+		<ft.swagger>https://raw.githubusercontent.com/fulfillmenttools/fulfillmenttools-api-reference/master/api.swagger.yaml</ft.swagger>
+
 		<!-- force to use okhttp3 version that works with Commercetools SDK and not Spring default -->
 		<okhttp3.version>4.0.1</okhttp3.version>
 		<commercetools.version>3.0.0</commercetools.version>
@@ -39,6 +41,10 @@
 	</scm>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -95,6 +101,11 @@
 			<artifactId>commercetools-sdk-java-api</artifactId>
 			<version>${commercetools.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.1.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -132,6 +143,45 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!--
+			<plugin>
+				<groupId>io.swagger.codegen.v3</groupId>
+				<artifactId>swagger-codegen-maven-plugin</artifactId>
+				<version>3.0.24</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<inputSpec>${ft.swagger}</inputSpec>
+							<language>java</language>
+							<library>resttemplate</library>
+							<output>target/generated-sources</output>
+							<ignoreFileOverride>${basedir}/.swagger-codegen-ignore</ignoreFileOverride>
+							<configOptions>
+								<sourceFolder>swagger</sourceFolder>
+								<java8>true</java8>
+								<dateLibrary>java8</dateLibrary>
+								<interfaceOnly>true</interfaceOnly>
+								<useBeanValidation>true</useBeanValidation>
+								<apiPackage>com.example.connectorpoc.ft.api</apiPackage>
+								<modelPackage>com.example.connectorpoc.ft.model</modelPackage>
+								<invokerPackage>com.example.connectorpoc.ft.invoker</invokerPackage>
+							</configOptions>
+							<generateApis>false</generateApis>
+							<generateApiDocumentation>false</generateApiDocumentation>
+							<generateApiTests>false</generateApiTests>
+							<generateModels>true</generateModels>
+							<generateModelTests>false</generateModelTests>
+							<generateModelDocumentation>false</generateModelDocumentation>
+							<generateSupportingFiles>false</generateSupportingFiles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			-->
 		</plugins>
 	</build>
 

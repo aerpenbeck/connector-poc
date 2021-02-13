@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class OrderGatewayImpl implements OrderGateway {
+public class OrderGatewayImpl /*implements OrderGateway*/ {
 
-    @Override
-    @ServiceActivator(inputChannel = "ordersChannel")
+    @ServiceActivator(inputChannel = "transformedOrdersChannel")
     public void processOrder(Order order) {
         log.info("Processing Order #{}", order.getId());
     }

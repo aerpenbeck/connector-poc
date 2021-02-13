@@ -17,10 +17,10 @@
 package com.example.connectorpoc.service;
 
 import com.commercetools.api.client.ApiRoot;
+import com.commercetools.api.models.order.Order;
 import com.commercetools.api.models.order.OrderPagedQueryResponse;
 import com.example.connectorpoc.config.ApplicationProperties;
 import com.example.connectorpoc.integration.OrderGateway;
-import com.example.connectorpoc.model.Order;
 import io.vrap.rmf.base.client.ApiHttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -72,10 +72,7 @@ public class OrderService {
 
             log.info("Retrieved {} orders", body.getCount());
 
-            body.getResults()
-                    .stream()
-                    .map(this::toOrder)
-                    .forEach(this::send);
+            body.getResults().forEach(this::sendOrder);
 
         } catch (ExecutionException | InterruptedException e) {
             log.error("Order query failed", e);
@@ -89,11 +86,7 @@ public class OrderService {
         log.info("Closed");
     }
 
-    private Order toOrder(com.commercetools.api.models.order.Order ctOrder) {
-        return new Order(ctOrder.getId());
-    }
-
-    private void send(Order order) {
+    private void sendOrder(Order order) {
         log.info("Sending Order #{}", order.getId());
         orderGateway.processOrder(order);
     }

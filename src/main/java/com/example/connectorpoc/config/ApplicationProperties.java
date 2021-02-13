@@ -41,4 +41,18 @@ public class ApplicationProperties {
     @Positive
     private int fetchOrdersLimit;
 
+    @NotBlank
+    private String backofficeUrl;
+
+    @NotBlank
+    private String ftUrl;
+
+    @NotBlank
+    private String ftAuthKey;
+
+    @NotBlank
+    private String ftLogin;
+
+    @NotBlank
+    private String ftPassword;
 }

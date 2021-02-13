@@ -18,7 +18,13 @@ import org.springframework.messaging.MessageChannel;
 public class IntegrationConfig {
 
     @Bean
-    public MessageChannel ordersChannel() {
+    public MessageChannel incomingOrdersChannel() {
+        return new DirectChannel();
+//        return new PublishSubscribeChannel();
+    }
+
+    @Bean
+    public MessageChannel transformedOrdersChannel() {
         return new DirectChannel();
 //        return new PublishSubscribeChannel();
     }
