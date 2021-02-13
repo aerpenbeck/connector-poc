@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2021 Arno Erpenbeck
+ */
 package com.example.connectorpoc.config;
 
 import com.commercetools.api.client.ApiRoot;

@@ -14,23 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-package com.example.connectorpoc;
+package com.example.connectorpoc.tasks;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import com.example.connectorpoc.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
- * Spring Boot starter class.
+ * A scheduled Task that fetches the orders from the Commercetools API.
  */
-@SpringBootApplication
-@ConfigurationPropertiesScan
-@EnableScheduling
-public class ConnectorPocApplication {
+@Component
+@Slf4j
+public class FetchOrdersTask {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ConnectorPocApplication.class, args);
+	private final OrderService orderService;
+
+	public FetchOrdersTask(OrderService orderService) {
+		this.orderService = orderService;
 	}
+
+	@Scheduled(fixedRate = 30000) // TODO make rate configurable
+    public void fetchOrders() {
+		orderService.fetchOrders();
+    }
 
 }

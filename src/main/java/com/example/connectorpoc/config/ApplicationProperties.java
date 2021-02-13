@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 /**
  * Reads <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-external-config-application-property-files">application.properties</a> and makes properties available to application.
@@ -33,4 +34,11 @@ public class ApplicationProperties {
 
     @NotBlank
     private String clientScopes;
+
+    @Positive
+    private int fetchOrdersInterval;
+
+    @Positive
+    private int fetchOrdersLimit;
+
 }
