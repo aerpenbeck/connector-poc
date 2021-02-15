@@ -39,7 +39,7 @@ public class PostOrderService {
 
             log.info("Successfully posted Order #{}", createdOrder.getId());
         } catch (RestClientException rce) {
-            log.error("Could not post Order #{} to FT API", order.getTenantOrderId());
+            log.error(String.format("Could not post Order #%s to FT API", order.getTenantOrderId()), rce);
         }
     }
 

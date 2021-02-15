@@ -42,7 +42,7 @@ public class ApplicationProperties {
     private int fetchOrdersLimit;
 
     @NotBlank
-    private String backofficeUrl;
+    private String postOrderFacility;
 
     @NotBlank
     private String ftUrl;

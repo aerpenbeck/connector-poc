@@ -14,6 +14,7 @@ It has no real practical value.
 ## Limitations of POC
 - error handling is very limited
 - mapping of CT to FT Order is error prone
+- mapping to FT DeliveryPreferences is a best guess and incomplete 
 - we do not refresh the API tokens
 - fetching orders from the Commercetools API is done in a blocking fashion (should be improved to non-blocking/async)
 - paging through all orders is not implemented yet (we only process the first page)
@@ -25,6 +26,7 @@ It has no real practical value.
 
 ## Requirements
 - OpenJDK 11
+- Apache Maven 
 - OpenAPI Generator [CLI](https://openapi-generator.tech/docs/installation/)
 - Node/npm (for OpenAPI generator)
 
@@ -34,7 +36,18 @@ mvn clean install
 ```
 
 ## How to run
-Edit your API client ID, secret, ... in `application-local.properties` and run
+Options to run the application once it has been built:
+a) Edit your API client ID, secret, ... in `application.properties` and run
+```
+java -jar target/connector-poc-0.0.1-SNAPSHOT.jar
+```
+
+b) Edit your API client ID, secret, ... in `application-development.properties` and run
+```
+mvn spring-boot:run
+```
+
+c) Edit your API client ID, secret, ... in `application-local.properties` and run
 ```
 mvn spring-boot:run -Plocal
 ```
@@ -42,9 +55,13 @@ mvn spring-boot:run -Plocal
 ## Configuration
 All configuration is done in `application.properties` and `application-development.properties`
 Make sure you do not commit real ids, secrets, keys in these files.
+You can create a local file `application-local.properties` for development.
 
 ## Tests
-... TODO ...
+Run tests like this
+```
+mvn test
+```
 
 ## Links
 

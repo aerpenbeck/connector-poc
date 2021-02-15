@@ -7,14 +7,17 @@ import com.commercetools.api.models.cart.LineItem;
 import com.commercetools.api.models.common.Address;
 import com.commercetools.api.models.order.Order;
 import com.commercetools.api.models.order.OrderState;
+import com.example.connectorpoc.config.ApplicationProperties;
 import com.example.connectorpoc.ft.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.integration.annotation.Transformer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCreation> {
 
+    private final ApplicationProperties applicationProperties;
+
+    public OrderTransformerCT2FT(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
+    }
+
     @Override
     @Transformer(inputChannel = "incomingOrdersChannel", outputChannel = "transformedOrdersChannel")
     public OrderForCreation transform(Order source) {
@@ -32,7 +41,9 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
                 .orderDate(toOffsetDateTime(source.getCreatedAt()))
                 .tenantOrderId(source.getId())
                 .status(toOrderStatus(source))
-                .consumer(toOrderForCreationConsumer(source));
+                .consumer(toOrderForCreationConsumer(source))
+                .deliveryPreferences(toDeliveryPreferences(source))
+                .customAttributes(Collections.emptyMap());
 
         orderForCreation.setOrderLineItems(source.getLineItems()
                 .stream()
@@ -42,17 +53,6 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
         log.debug("Transformed CT Order #{} into FT Order '{}", source.getId(), orderForCreation);
 
         return orderForCreation;
-    }
-
-    private OrderLineItemForCreation toOrderLineItemForCreation(LineItem lineItem) {
-        OrderLineItemForCreation orderLineItemForCreation = new OrderLineItemForCreation();
-        orderLineItemForCreation.setQuantity(lineItem.getQuantity());
-        OrderLineItemArticle article = new OrderLineItemArticle()
-                .tenantArticleId(lineItem.getId())
-                .title(lineItem.getName().values().getOrDefault(Locale.ENGLISH.toString(), "Missing Title"));
-        orderLineItemForCreation.setArticle(article);
-
-        return orderLineItemForCreation;
     }
 
     private OffsetDateTime toOffsetDateTime(ZonedDateTime zonedDateTime) {
@@ -109,6 +109,39 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
             return order.getItemShippingAddresses().get(0);
         }
         return null;
+    }
+
+    private OrderLineItemForCreation toOrderLineItemForCreation(LineItem lineItem) {
+        OrderLineItemForCreation orderLineItemForCreation = new OrderLineItemForCreation()
+                .quantity(lineItem.getQuantity())
+                .scannableCodes(Collections.emptyList())
+                .customAttributes(Collections.emptyMap());
+        OrderLineItemArticle article = new OrderLineItemArticle()
+                .tenantArticleId(lineItem.getId())
+                .title(lineItem.getName().values().getOrDefault(Locale.ENGLISH.toString(), "Missing Title"))
+                .imageUrl("")
+                .customAttributes(Collections.emptyMap())
+                .attributes(Collections.emptyList());
+        orderLineItemForCreation.setArticle(article);
+
+        return orderLineItemForCreation;
+    }
+
+    private DeliveryPreferences toDeliveryPreferences(Order order) {
+        // TODO guessing only, do not understand the domain
+        DeliveryPreferences deliveryPreferences = new DeliveryPreferences();
+
+        DeliveryPreferencesShipping deliveryPreferencesShipping = new DeliveryPreferencesShipping()
+                .servicetype(DeliveryPreferencesShipping.ServicetypeEnum.BEST_EFFORT)
+                .preferredCarriers(Collections.singletonList(CarrierKey.DHL));
+
+        CollectDelivery collectDelivery = new CollectDelivery().facilityRef(applicationProperties.getPostOrderFacility());
+
+        deliveryPreferences.targetTime(OffsetDateTime.now().plus(Duration.ofDays(7)))
+                .collect(Collections.singletonList(collectDelivery))
+                .shipping(deliveryPreferencesShipping);
+
+        return deliveryPreferences;
     }
 
 }
