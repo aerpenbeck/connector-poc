@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2021 Arno Erpenbeck
  */
-package com.example.connectorpoc.config;
+package com.example.connectorpoc.integration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -19,6 +19,7 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +38,8 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
     @Override
     @Transformer(inputChannel = "incomingOrdersChannel", outputChannel = "transformedOrdersChannel")
     public OrderForCreation transform(Order source) {
+        Objects.requireNonNull(source, "Source Order is required, it must not be null");
+
         OrderForCreation orderForCreation = new OrderForCreation()
                 .orderDate(toOffsetDateTime(source.getCreatedAt()))
                 .tenantOrderId(source.getId())
@@ -56,6 +59,7 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
     }
 
     private OffsetDateTime toOffsetDateTime(ZonedDateTime zonedDateTime) {
+        Objects.requireNonNull(zonedDateTime, "Argument is required, it must not be null");
         return OffsetDateTime.ofInstant(zonedDateTime.toInstant(), zonedDateTime.getOffset());
     }
 
@@ -112,6 +116,7 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
     }
 
     private OrderLineItemForCreation toOrderLineItemForCreation(LineItem lineItem) {
+        Objects.requireNonNull(lineItem, "LineItem is required, it must not be null");
         OrderLineItemForCreation orderLineItemForCreation = new OrderLineItemForCreation()
                 .quantity(lineItem.getQuantity())
                 .scannableCodes(Collections.emptyList())

@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2021 Arno Erpenbeck
  */
-package com.example.connectorpoc.config;
+package com.example.connectorpoc.ct;
 
 import com.commercetools.api.client.ApiRoot;
 import com.commercetools.api.defaultconfig.ApiFactory;
 import com.commercetools.api.defaultconfig.ServiceRegion;
+import com.example.connectorpoc.config.ApplicationProperties;
 import io.vrap.rmf.base.client.oauth2.ClientCredentials;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

@@ -19,12 +19,10 @@ package com.example.connectorpoc.tasks;
 import com.example.connectorpoc.service.FetchOrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 /**
  * A scheduled Task that fetches the orders from the Commercetools API.
  */
-@Component
 @Slf4j
 public class FetchOrdersTask {
 
@@ -36,6 +34,7 @@ public class FetchOrdersTask {
 
 	@Scheduled(fixedRate = 30000) // TODO make rate configurable
     public void fetchOrders() {
+		log.debug("Time to fetch some orders...");
 		fetchOrderService.fetchOrders();
     }
 

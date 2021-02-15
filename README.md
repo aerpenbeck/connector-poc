@@ -14,7 +14,7 @@ It has no real practical value.
 ## Limitations of POC
 - error handling is very limited
 - mapping of CT to FT Order is error prone
-- mapping to FT DeliveryPreferences is a best guess and incomplete 
+- mapping to FT DeliveryPreferences is a best guess and incomplete
 - we do not refresh the API tokens
 - fetching orders from the Commercetools API is done in a blocking fashion (should be improved to non-blocking/async)
 - paging through all orders is not implemented yet (we only process the first page)
@@ -26,7 +26,7 @@ It has no real practical value.
 
 ## Requirements
 - OpenJDK 11
-- Apache Maven 
+- Apache Maven
 - OpenAPI Generator [CLI](https://openapi-generator.tech/docs/installation/)
 - Node/npm (for OpenAPI generator)
 
@@ -37,6 +37,8 @@ mvn clean install
 
 ## How to run
 Options to run the application once it has been built:
+
+
 a) Edit your API client ID, secret, ... in `application.properties` and run
 ```
 java -jar target/connector-poc-0.0.1-SNAPSHOT.jar
