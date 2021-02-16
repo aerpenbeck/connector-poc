@@ -58,25 +58,39 @@ public class FetchOrderService {
     }
 
     private void doFetchOrders() {
-        CompletableFuture<ApiHttpResponse<OrderPagedQueryResponse>> execute = apiRoot
-                .withProjectKey(applicationProperties.getProjectKey())
-                .orders()
-                .get()
-                .withLimit(applicationProperties.getFetchOrdersLimit())
-                .execute();
+        // see https://docs.commercetools.com/api/general-concepts#pagedqueryresult
+        int offset = 0;
+        int limit = applicationProperties.getFetchOrdersLimit();
+        long count = 0;
 
-        try {
-            // TODO convert blocking call into non-blocking
-            // TODO understand + use limit, count, offset, total
-            OrderPagedQueryResponse body = execute.get().getBody();
+        do {
+            CompletableFuture<ApiHttpResponse<OrderPagedQueryResponse>> execute = apiRoot
+                    .withProjectKey(applicationProperties.getProjectKey())
+                    .orders()
+                    .get()
+                    .withLimit(limit)
+                    .withOffset(offset)
+                    .withWithTotal(false)
+                    .execute();
 
-            log.info("Retrieved {} orders", body.getCount());
+            try {
+                OrderPagedQueryResponse body = execute.get().getBody();
+                // TODO convert blocking call into non-blocking
+//                CompletableFuture<OrderPagedQueryResponse> future = execute.thenApply(ApiHttpResponse::getBody);
+//                OrderPagedQueryResponse body = future.get();
 
-            body.getResults().forEach(this::sendOrder);
+                count = body.getCount();
+                log.info("Retrieved {} orders (offset={})", count, offset);
 
-        } catch (ExecutionException | InterruptedException e) {
-            log.error("Order query failed", e);
-        }
+                body.getResults().forEach(this::sendOrder);
+
+            } catch (ExecutionException | InterruptedException e) {
+                log.error("Order query failed", e);
+            }
+
+            offset += limit;
+            count = 0;
+        } while (count > 0);
     }
 
     @PreDestroy

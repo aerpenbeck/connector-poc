@@ -57,5 +57,8 @@ public class ApplicationProperties {
     private String ftPassword;
 
     @NotBlank
-    private String ftToken;
+    private String idpUrl;
+
+    @NotBlank
+    private String refreshUrl;
 }

@@ -15,9 +15,8 @@ It has no real practical value.
 - error handling is very limited
 - mapping of CT to FT Order is error prone
 - mapping to FT DeliveryPreferences is a best guess and incomplete
-- we do not refresh the API tokens
+- simple hand-coded approach to obtain/refresh API token (should be done in a proper OAuth fashion)
 - fetching orders from the Commercetools API is done in a blocking fashion (should be improved to non-blocking/async)
-- paging through all orders is not implemented yet (we only process the first page)
 - we currently do not track which orders have already been processed (would require some persistence)
 - after the order has been posted to the Fulfillmenttools API there should be some visible result/logging etc.
 - generated Java client for Fulfillmenttools API was added to source tree and manually modified to make it compile
