@@ -17,8 +17,8 @@ It has no real practical value.
 - mapping to FT DeliveryPreferences is a best guess and incomplete
 - simple hand-coded approach to obtain/refresh API token (should be done in a proper OAuth fashion)
 - fetching orders from the Commercetools API is done in a blocking fashion (should be improved to non-blocking/async)
-- we currently do not track which orders have already been processed (would require some persistence)
-- after the order has been posted to the Fulfillmenttools API there should be some visible result/logging etc.
+- we currently do not track which orders have already been processed.
+  this could be implemented using the `OrderFilter` and would require some persistence
 - generated Java client for Fulfillmenttools API was added to source tree and manually modified to make it compile
   (usually we would generate the source as part of the build process)
 - Spring message channels are `DirectChannel` and should be changed into `PublishSubscribeChannel`

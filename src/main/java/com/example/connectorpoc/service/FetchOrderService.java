@@ -89,6 +89,7 @@ public class FetchOrderService {
             }
 
             offset += limit;
+            // TODO for demo only process first page
             count = 0;
         } while (count > 0);
     }
@@ -101,7 +102,7 @@ public class FetchOrderService {
     }
 
     private void sendOrder(Order order) {
-        log.info("Processing Order #{}", order.getId());
+        log.info("Processing Order '{}'", order.getId());
         orderGateway.processOrder(order);
     }
 

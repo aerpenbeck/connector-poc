@@ -36,7 +36,7 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
     }
 
     @Override
-    @Transformer(inputChannel = "incomingOrdersChannel", outputChannel = "transformedOrdersChannel")
+    @Transformer(inputChannel = "filteredOrdersChannel", outputChannel = "transformedOrdersChannel")
     public OrderForCreation transform(Order source) {
         Objects.requireNonNull(source, "Source Order is required, it must not be null");
 
@@ -53,7 +53,7 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
                 .map(this::toOrderLineItemForCreation)
                 .collect(Collectors.toList()));
 
-        log.debug("Transformed CT Order #{} into FT Order '{}", source.getId(), orderForCreation);
+        log.debug("Transformed CT Order '{}' into FT Order '{}'", source.getId(), orderForCreation);
 
         return orderForCreation;
     }
@@ -70,7 +70,7 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
         } else if (OrderState.CANCELLED.getJsonName().equals(orderState.getJsonName())) {
             return OrderStatus.CANCELLED;
         } else {
-            log.warn("Don't know how to handle OrderState {} of Order #{}", orderState.getJsonName(), order.getId());
+            log.warn("Don't know how to handle OrderState '{}' of Order '{}'", orderState.getJsonName(), order.getId());
         }
         return null;
     }
@@ -78,7 +78,7 @@ public class OrderTransformerCT2FT implements OrderTransformer<Order, OrderForCr
     private OrderForCreationConsumer toOrderForCreationConsumer(Order order) {
         Address shippingAddress = getShippingAddress(order);
         if (shippingAddress == null) {
-            log.warn("No shipping address for Order #{}", order.getId());
+            log.warn("No shipping address for Order '{}'", order.getId());
             return null;
         }
         OrderForCreationConsumer consumer = new OrderForCreationConsumer();

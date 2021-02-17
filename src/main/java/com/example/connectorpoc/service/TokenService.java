@@ -23,6 +23,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Poor man's implementation to obtain and renew OAuth token.
@@ -33,19 +35,18 @@ public class TokenService {
 
     private final ApplicationProperties applicationProperties;
 
-    private final Object lock;
+    private final Lock lock = new ReentrantLock();
 
-    private Token token;
+    private volatile Token token;
 
     public TokenService(ApplicationProperties applicationProperties) {
         this.applicationProperties = applicationProperties;
-        lock = new Object();
     }
 
     // poor man's solution to obtain OAuth token
     Optional<String> getToken() {
-        // TODO hand-coded synchronization code rarely is a good idea
-        synchronized (lock) {
+        lock.lock();
+        try {
             if (token == null) {
                 Optional<Token> t = obtainToken();
                 if (t.isPresent()) {
@@ -67,6 +68,8 @@ public class TokenService {
                     return Optional.of(token.getToken());
                 }
             }
+        } finally {
+            lock.unlock();
         }
     }
 
